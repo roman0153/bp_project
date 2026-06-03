@@ -1,0 +1,13 @@
+# Závislosti pre Prompt Injection Lab
+# Inštalácia: pip install -r requirements.txt
+
+openai>=1.51.0
+anthropic>=0.34.0
+google-generativeai>=0.8.0
+fastapi>=0.115.0
+uvicorn>=0.30.6
+python-dotenv>=1.0.1
+pypdf>=6.10.2
+reportlab>=4.5.0
+tqdm>=4.66.5
+pymupdf>=1.27.2
