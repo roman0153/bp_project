@@ -18,7 +18,7 @@ Usage:
     # + domain validation + LLM judge combined (Layer 2)
     python runner_subtle_defended.py --layer 2 --models gpt-4o-mini --runs 10
 
-    # + hardened system prompt (Layer 3)
+    # + HITL escalation — flags requiring manual review (Layer 3)
     python runner_subtle_defended.py --layer 3 --models gpt-4o-mini --runs 5
 
     # Replicate Table 22 from the thesis — all layers
@@ -70,11 +70,13 @@ INVOICE_ATTACKS = [
 
 # Mapovanie vrstvy → aktívne obrany.
 # Vrstvy sú kumulatívne. Domain validácia a LLM sudca sa vždy používajú spolu (vrstva 2).
+# Vrstva 3 navyše aktivuje HITL (human-in-the-loop): keď domain_validator vráti
+# requires_human=True (vysoké skóre, neznámy IBAN…), prípad sa eskaluje na človeka.
 LAYER_CONFIGS = {
     0: {},
     1: {"safe_extract": True},
     2: {"safe_extract": True, "domain_validate": True, "judge": True},
-    3: {"safe_extract": True, "harden": True, "domain_validate": True, "judge": True},
+    3: {"safe_extract": True, "domain_validate": True, "judge": True, "hitl": True},
 }
 
 

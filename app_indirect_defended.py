@@ -108,6 +108,8 @@ def query_hr_defended(
             - "harden":        zosilnený systémový prompt (5.1.2 + 5.2.x)
             - "domain_validate": doménová validácia výstupu (5.2.4)
             - "judge":         LLM sudca obsahu (5.2.5)
+            - "hitl":          human-in-the-loop eskalácia (5.2.6) —
+                                blokuje keď domain_validator vráti requires_human=True
     """
     if layers is None:
         layers = {}
@@ -140,6 +142,12 @@ def query_hr_defended(
         info.judge_reason = verdict.reason
         if not verdict.is_safe and info.blocked_by is None:
             info.blocked_by = "llm_judge"
+
+    # === Vrstva 5: HITL (human-in-the-loop) ===
+    # Ak je HITL zapnuté a domain_validator vyžaduje manuálnu kontrolu,
+    # útok sa eskaluje na človeka (z pohľadu automatu = zablokované).
+    if layers.get("hitl") and info.requires_human and info.blocked_by is None:
+        info.blocked_by = "hitl"
 
     return response, info
 
@@ -181,5 +189,9 @@ def query_invoice_defended(
         info.judge_reason = verdict.reason
         if not verdict.is_safe and info.blocked_by is None:
             info.blocked_by = "llm_judge"
+
+    # === Vrstva 5: HITL (human-in-the-loop) ===
+    if layers.get("hitl") and info.requires_human and info.blocked_by is None:
+        info.blocked_by = "hitl"
 
     return response, info

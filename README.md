@@ -171,9 +171,9 @@ Výsledky sa ukladajú do `results/defended_layer<N>_<timestamp>.csv`.
 | Layer | Aktívne obrany |
 |-------|---------------|
 | 0 | Baseline — žiadna obrana |
-| 1 | SafeExtractPDF (filtrácia bieleho textu, mikro textu, metadát) |
-| 2 | + DomainValidator + LLMJudge (validácia výstupu + sudca) |
-| 3 | + zosilnený systémový prompt |
+| 1 | Sanitizácia dokumentu (SafeExtractPDF — filtrácia bieleho textu, mikro textu, metadát) |
+| 2 | + LLMJudge + DomainValidator (sudca výstupu + doménová validácia) |
+| 3 | + HITL (human-in-the-loop — manuálna kontrola pri `requires_human=True`) |
 
 ```bash
 python runner_subtle_defended.py --layer 0 --models gpt-4o-mini --runs 10
